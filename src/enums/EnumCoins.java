@@ -1,6 +1,7 @@
-package djairdj.conversor.models;
+package enums;
 
 public enum EnumCoins {
+  // region Coins
   BRL("Real Brasileiro"),
   BTC("Bitcoin"),
   USD("Dólar Americano"),
@@ -152,7 +153,7 @@ public enum EnumCoins {
   ZMK("Kwacha Zambiana"),
   ZAR("Rand Sul-Africano"),
   ZWL("Dólar Zimbabuense");
-
+  // endregion
   private final String name;
 
   EnumCoins(String nome) {

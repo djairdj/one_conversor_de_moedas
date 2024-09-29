@@ -1,4 +1,6 @@
-package djairdj.conversor.models;
+package models;
+
+import enums.MoedaTipo;
 
 public class Moeda {
   MoedaTipo tipo;
