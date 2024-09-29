@@ -98,13 +98,17 @@ public class ConsoleIO {
   private static void showResultConversion(double value, EnumCoinToUse base, EnumCoinToUse target, double rate) {
     NumberFormat moneyBase = NumberFormat.getCurrencyInstance(base.local);
     NumberFormat moneyConversion = NumberFormat.getCurrencyInstance(target.local);
+    double newValue = value * rate;
 
-    String messageBaseCoin = moneyBase.format(value), messageTargetCoin = moneyConversion.format(value * rate);
+    String messageBaseCoin =
+        moneyBase.format(value),
+        messageTargetCoin = moneyConversion.format(newValue),
+        bitSymbol = "₿";
 
-    DecimalFormat formatoBitcoin = new DecimalFormat("#,##0.########");
-    String bitSymbol = "₿";
+    DecimalFormat formatoBitcoin = new DecimalFormat("#,##0.##########");
+
     if(target.sigla == EnumCoin.BTC) {
-      messageTargetCoin = String.format("%s %s", bitSymbol, formatoBitcoin.format(value * rate));
+      messageTargetCoin = String.format("%s %s", bitSymbol, formatoBitcoin.format(newValue));
     }
     if(base.sigla == EnumCoin.BTC) {
       messageBaseCoin = String.format("%s %s", bitSymbol, formatoBitcoin.format(value));
