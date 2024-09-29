@@ -1,12 +1,11 @@
 package view;
 
 import api.Exchange;
-import enums.EnumCoins;
-import enums.MoedaTipo;
+import enums.EnumCoin;
+import enums.EnumCoinToUse;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +29,7 @@ public class ConsoleIO {
   }
 
   private static void showOptions() throws InterruptedException {
-    MoedaTipo baseCoin, conversionCoin;
+    EnumCoinToUse baseCoin, conversionCoin;
 
     baseCoin = getBaseCoin();
     System.out.println();
@@ -41,7 +40,7 @@ public class ConsoleIO {
     System.out.println("Moeda base escolhida: " + baseCoin);
     System.out.println("Moeda para conversão: " + conversionCoin);
 
-    Double rate = getRateFomApi(baseCoin, conversionCoin, value);
+    Double rate = getRateFomApi(baseCoin, conversionCoin);
     loading();
     if(rate != null) showResultConversion(value, baseCoin, conversionCoin, rate);
     else System.err.println("Não foi possível calcular a taxa de câmbio.");
@@ -49,25 +48,25 @@ public class ConsoleIO {
     if(scn.nextLine().equals("1")) showOptions();
   }
 
-  private static MoedaTipo getBaseCoin() {
+  private static EnumCoinToUse getBaseCoin() {
     showCoins();
     String messageQuestion = "\nInforme o número correspondente a moeda que desejas cambiar: ";
     String messageError = "Valor informado não condizente com o enunciado, corrija sua resposta.\n";
-    MoedaTipo[] coins = MoedaTipo.values();
+    EnumCoinToUse[] coins = EnumCoinToUse.values();
     int option = inputNumberValidate(1, coins.length, messageQuestion, messageError);
     return coins[option - 1];
   }
 
-  private static MoedaTipo getConversionCoin() {
+  private static EnumCoinToUse getConversionCoin() {
     showCoins();
     String messageQuestion = "\nInforme o número correspondente a moeda para a qual o valor será convertido: ";
     String messageError = "Valor informado não condizente com o enunciado, corrija sua resposta.\n";
-    MoedaTipo[] coins = MoedaTipo.values();
+    EnumCoinToUse[] coins = EnumCoinToUse.values();
     int option = inputNumberValidate(1, coins.length, messageQuestion, messageError);
     return coins[option - 1];
   }
 
-  private static double getValueFromUser(MoedaTipo baseCoin) {
+  private static double getValueFromUser(EnumCoinToUse baseCoin) {
     String messageQuestion = String.format("Informe o valor em %s que desejas converter: ", baseCoin);
     String messageError = "Valor informado não é numérico, corrija sua resposta.\n";
     return inputNumberValidate(0d, Double.MAX_VALUE - 1, messageQuestion, messageError);
@@ -75,7 +74,7 @@ public class ConsoleIO {
 
   private static void showCoins() {
     System.out.println();
-    MoedaTipo[] coins = MoedaTipo.values();
+    EnumCoinToUse[] coins = EnumCoinToUse.values();
     StringBuilder result = new StringBuilder();
     for(int i = 0; i < coins.length; ) {
       result.append(String.format("%d - %s\n", ++i, coins[i - 1]));
@@ -87,7 +86,7 @@ public class ConsoleIO {
     TimeUnit.MILLISECONDS.sleep(50);
   }
 
-  private static Double getRateFomApi(MoedaTipo coinBase, MoedaTipo coinTarget, double value) {
+  private static Double getRateFomApi(EnumCoinToUse coinBase, EnumCoinToUse coinTarget) {
     try {
       return Exchange.getRate(coinBase.sigla, coinTarget.sigla);
     } catch(Exception ex) {
@@ -96,22 +95,22 @@ public class ConsoleIO {
     return null;
   }
 
-  private static void showResultConversion(double value, MoedaTipo base, MoedaTipo target, double rate) {
-    NumberFormat moneyBase = NumberFormat.getCurrencyInstance(base.local());
-    NumberFormat moneyConversion = NumberFormat.getCurrencyInstance(target.local());
+  private static void showResultConversion(double value, EnumCoinToUse base, EnumCoinToUse target, double rate) {
+    NumberFormat moneyBase = NumberFormat.getCurrencyInstance(base.local);
+    NumberFormat moneyConversion = NumberFormat.getCurrencyInstance(target.local);
 
     String messageBaseCoin = moneyBase.format(value), messageTargetCoin = moneyConversion.format(value * rate);
 
     DecimalFormat formatoBitcoin = new DecimalFormat("#,##0.########");
     String bitSymbol = "₿";
-    if(target.sigla == EnumCoins.BTC) {
+    if(target.sigla == EnumCoin.BTC) {
       messageTargetCoin = String.format("%s %s", bitSymbol, formatoBitcoin.format(value * rate));
     }
-    if(base.sigla == EnumCoins.BTC) {
+    if(base.sigla == EnumCoin.BTC) {
       messageBaseCoin = String.format("%s %s", bitSymbol, formatoBitcoin.format(value));
     }
 
-    System.out.println("Efetivando o câmbio de " + EnumCoins.descriptionFromCombinations(base.sigla, target.sigla));
+    System.out.println("Efetivando o câmbio de " + EnumCoin.descriptionFromCombinations(base.sigla, target.sigla));
     System.out.printf("O valor %s na moeda %s dará ~= %s em %s\n", messageBaseCoin, base, messageTargetCoin, target);
   }
 

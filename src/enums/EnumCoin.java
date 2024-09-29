@@ -1,6 +1,6 @@
 package enums;
 
-public enum EnumCoins {
+public enum EnumCoin {
   // region Coins
   BRL("Real Brasileiro"),
   BTC("Bitcoin"),
@@ -156,7 +156,7 @@ public enum EnumCoins {
   // endregion
   private final String name;
 
-  EnumCoins(String nome) {
+  EnumCoin(String nome) {
     this.name = nome;
   }
 
@@ -165,7 +165,7 @@ public enum EnumCoins {
     return this.name;
   }
 
-  public static String descriptionFromCombinations(EnumCoins... siglas) {
+  public static String descriptionFromCombinations(EnumCoin... siglas) {
     StringBuilder sb = new StringBuilder();
     for(int i = 0, l = siglas.length; i < l; ++i) sb.append(siglas[i]).append(i < l - 1 ? "/" : "");
     return sb.toString();

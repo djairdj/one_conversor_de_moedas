@@ -1,12 +1,10 @@
 package api;
 
-import enums.EnumCoins;
-import enums.EnumCombinations;
+import enums.EnumCoin;
+import enums.EnumCoinCombinations;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -20,29 +18,11 @@ public abstract class Exchange {
 
   static {
     jsonObject = jsonFromAPI();
-//    jsonObject = jsonFromFile("src\\cofrinho\\api\\exchange.json");
-  }
-
-  /**
-   * Função realiza a leitura de um texto já formatado em JSON num arquivo do diretório, após isso, retorna um JSONObject oriundo do texto citado.
-   *
-   * @param path Caminho do arquivo que contém o JSON já formatado.
-   * @return JSONObject resultante do parse do texto do arquivo lido, ou um JSONObject vazio caso não seja possível a leitura
-   */
-  private static JSONObject jsonFromFile(String path) {
-    StringBuilder sb = new StringBuilder();
-    try(BufferedReader reader = new BufferedReader(new FileReader(path))) {
-      String linha;
-      while((linha = reader.readLine()) != null) sb.append(linha);
-    } catch(IOException e) {
-      e.printStackTrace();
-    }
-    return new JSONObject(sb.toString());
   }
 
   private static JSONObject jsonFromAPI() {
     StringBuilder urlMoedas = new StringBuilder();
-    EnumCombinations[] enumSiglasCoins = EnumCombinations.values();
+    EnumCoinCombinations[] enumSiglasCoins = EnumCoinCombinations.values();
     for(var sourceEnumSiglasCoins : enumSiglasCoins) urlMoedas.append(",%s".formatted(sourceEnumSiglasCoins));
 
     urlMoedas = new StringBuilder(URL + urlMoedas.substring(1));
@@ -58,11 +38,11 @@ public abstract class Exchange {
     }
   }
 
-  public static double getRate(EnumCoins sourceEnumSiglasCoins, EnumCoins destinyEnumSiglasCoins) {
+  public static double getRate(EnumCoin sourceEnumSiglasCoins, EnumCoin destinyEnumSiglasCoins) {
     return getRate(jsonObject, sourceEnumSiglasCoins, destinyEnumSiglasCoins);
   }
 
-  public static double getRate(JSONObject jsonObject, EnumCoins sourceEnumSiglasCoins, EnumCoins destinyEnumSiglasCoins) {
+  public static double getRate(JSONObject jsonObject, EnumCoin sourceEnumSiglasCoins, EnumCoin destinyEnumSiglasCoins) {
     if(sourceEnumSiglasCoins == destinyEnumSiglasCoins) return 1;
     try {
       var content = jsonObject.getJSONObject(sourceEnumSiglasCoins.name() + destinyEnumSiglasCoins.name());
@@ -72,17 +52,5 @@ public abstract class Exchange {
           sourceEnumSiglasCoins.name(), destinyEnumSiglasCoins.name()));
     }
   }
-
-  public static String getDataCreated(JSONObject jsonObject, EnumCoins sourceEnumSiglasCoins, EnumCoins destinyEnumSiglasCoins) {
-    try {
-      var content = jsonObject.getJSONObject(sourceEnumSiglasCoins.name() + destinyEnumSiglasCoins.name());
-      return content.getString("create_date");
-    } catch(JSONException jsonException) {
-      throw new RuntimeException("Data de checagem do câmbio não encontrada");
-    }
-  }
-
-  public static String getDataCreated(EnumCoins sourceEnumSiglasCoins, EnumCoins destinyEnumSiglasCoins) {
-    return getDataCreated(jsonObject, sourceEnumSiglasCoins, destinyEnumSiglasCoins);
-  }
+  
 }
