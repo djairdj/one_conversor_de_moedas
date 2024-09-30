@@ -40,12 +40,12 @@ public class ConsoleIO {
     System.out.println("Moeda base escolhida: " + baseCoin);
     System.out.println("Moeda para conversão: " + conversionCoin);
 
-    Double rate = getRateFomApi(baseCoin, conversionCoin);
+    Double rate = getRateFromApi(baseCoin, conversionCoin);
     loading();
     if(rate != null) showResultConversion(value, baseCoin, conversionCoin, rate);
     else System.err.println("Não foi possível calcular a taxa de câmbio.");
     System.out.print("\nDeseja efetivar novo câmbio?\nDigite 1 para sim ou qualquer outra coisa para não: ");
-    if(scn.nextLine().equals("1")) showOptions();
+    if(scn.nextLine().trim().equals("1")) showOptions();
   }
 
   private static EnumCoinToUse getBaseCoin() {
@@ -86,7 +86,7 @@ public class ConsoleIO {
     TimeUnit.MILLISECONDS.sleep(50);
   }
 
-  private static Double getRateFomApi(EnumCoinToUse coinBase, EnumCoinToUse coinTarget) {
+  private static Double getRateFromApi(EnumCoinToUse coinBase, EnumCoinToUse coinTarget) {
     try {
       return Exchange.getRate(coinBase.sigla, coinTarget.sigla);
     } catch(Exception ex) {

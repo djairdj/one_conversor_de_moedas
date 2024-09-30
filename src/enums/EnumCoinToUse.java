@@ -3,6 +3,7 @@ package enums;
 import java.util.Locale;
 
 public enum EnumCoinToUse {
+  //region Coins
   REAL(EnumCoin.BRL, new Locale("pt", "BR")),
   DOLLAR(EnumCoin.USD, new Locale("en", "US")),
   EURO(EnumCoin.EUR, new Locale(Locale.ITALIAN.getCountry(), "IT")),
@@ -10,6 +11,7 @@ public enum EnumCoinToUse {
   BITCOIN(EnumCoin.BTC, new Locale(Locale.ROOT.getLanguage())),
   //ARS(EnumCoins.ARS, new Locale("es", "AR")),
   ;
+  //endregion
 
   public final Locale local;
   public final EnumCoin sigla;
@@ -18,5 +20,4 @@ public enum EnumCoinToUse {
     this.sigla = sigla;
     this.local = local;
   }
-
 }

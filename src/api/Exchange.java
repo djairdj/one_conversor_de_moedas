@@ -52,5 +52,4 @@ public abstract class Exchange {
           sourceEnumSiglasCoins.name(), destinyEnumSiglasCoins.name()));
     }
   }
-  
 }
