@@ -4,10 +4,9 @@ Um conversor de moedas simples que permite a conversão entre vários tipos moed
 
 ## Índice
 
-- [Sobre](#sobre)
+- [Sobre](#Sobre)
 - [Funcionalidades](#funcionalidades)
-- [Moedas Suportadas](#moedas-suportadas)
-- [Manutenção](#-manutenção)
+- [Manutenção](#manutenção)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Instalação](#instalação)
 - [Uso](#uso)
@@ -60,7 +59,7 @@ Instale também o GIT
 
 Siga os passos abaixo para baixar e configurar a aplicação localmente:
 
-1. Abra um terminal/Prompt em uma pasta de sua preferência.
+1. Abra um Terminal/Prompt em uma pasta de sua preferência.
 2. Clone esse repositório:
    ```bash
    git clone https://github.com/djairdj/one_conversor_de_moedas.git conversor_de_moedas
@@ -69,7 +68,27 @@ Siga os passos abaixo para baixar e configurar a aplicação localmente:
    ```bash
    cd conversor_de_moedas/
    ```
-4. **Abra um editor de código na pasta e execute por ele**
+
+4. **Compile/execute os arquivos Java:**
+
+    - #### No _Prompt de Comandos_ do Windows
+       ```bash
+       dir /s /b src\*.java > sources.txt
+       ```
+       ```bash 
+       javaac -d bin -cp lib/json_20230618-sources.jar @sources.txt
+       ```
+       ```bash
+       cd bin && java -cp .;lib\json_20230618-sources.jar Run
+      ```
+
+    - **No Linux:**
+      ```bash
+      javac -d bin -cp lib/json_20230618-sources.jar $(find src -name "*.java")
+      ```
+      ```bash
+      cd bin/ && java Run
+      ```
 
 ## Uso
 
